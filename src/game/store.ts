@@ -15,6 +15,7 @@ type Store = GameState & {
   pause: () => void;
   resume: () => void;
   restart: () => void;
+  setQuality: (quality: 'low' | 'medium' | 'high') => void;
 };
 
 const DEFAULT_SEED = 'seed';
@@ -52,6 +53,7 @@ export const useGameStore = create<Store>((set, get) => {
       rngSeed: seed ?? DEFAULT_SEED,
       rngState: 0,
       accumulatorMs: 0,
+      quality: getQualityFromUrl() ?? getQualityFromStorage() ?? 'high',
     });
   }
 
@@ -126,6 +128,24 @@ export const useGameStore = create<Store>((set, get) => {
     start(get().rngSeed);
   }
 
+  function setQuality(quality: 'low' | 'medium' | 'high'): void {
+    set({ quality });
+    localStorage.setItem('r3f-tetris-quality', quality);
+  }
+
+  function getQualityFromUrl(): 'low' | 'medium' | 'high' | null {
+    if (typeof window === 'undefined') return null;
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('quality');
+    return q === 'low' || q === 'medium' || q === 'high' ? q : null;
+  }
+
+  function getQualityFromStorage(): 'low' | 'medium' | 'high' | null {
+    if (typeof window === 'undefined') return null;
+    const stored = localStorage.getItem('r3f-tetris-quality');
+    return stored === 'low' || stored === 'medium' || stored === 'high' ? stored : null;
+  }
+
   // Pause on window blur; do not auto-resume if user paused manually
   if (typeof window !== 'undefined') {
     window.addEventListener('blur', () => set({ paused: true }));
@@ -149,6 +169,7 @@ export const useGameStore = create<Store>((set, get) => {
     pause,
     resume,
     restart,
+    setQuality,
   };
 });
 

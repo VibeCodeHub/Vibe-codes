@@ -1,6 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 import { InstancedMesh, BoxGeometry, MeshPhysicalMaterial, Color, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
+import { useGameStore } from '../game/store';
 import type { Board } from '../game/types';
 
 type BoardProps = { board: Board };
@@ -19,15 +20,19 @@ const COLORS = [
 
 export default function BoardMesh({ board }: BoardProps): React.ReactElement {
   const instRef = useRef<InstancedMesh | null>(null);
+  const quality = useGameStore(s => s.quality);
   const geometry = useMemo(() => new BoxGeometry(1, 1, 1), []);
-  const material = useMemo(() => new MeshPhysicalMaterial({
-    metalness: 0,
-    roughness: 0.08,
-    transmission: 1.0,
-    ior: 1.5,
-    thickness: 0.22,
-    attenuationDistance: 2.0,
-  }), []);
+  const material = useMemo(() => {
+    const enableTransmission = quality !== 'low';
+    return new MeshPhysicalMaterial({
+      metalness: 0,
+      roughness: 0.08,
+      transmission: enableTransmission ? 1.0 : 0,
+      ior: 1.5,
+      thickness: enableTransmission ? 0.22 : 0,
+      attenuationDistance: 2.0,
+    });
+  }, [quality]);
 
   useFrame(() => {
     const inst = instRef.current;

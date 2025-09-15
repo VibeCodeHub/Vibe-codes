@@ -4,6 +4,7 @@ import BoardMesh from './scene/Board';
 import Tetromino from './scene/Tetromino';
 import { useGameStore } from './game/store';
 import HUD from './ui/HUD';
+import TouchControls from './ui/TouchControls';
 
 function App(): React.ReactElement {
   const { board, active, tick, move, rotate, softDrop, hardDrop, hold, pause } = useGameStore(s => ({
@@ -64,6 +65,7 @@ function App(): React.ReactElement {
         <Tetromino piece={active} />
       </Scene>
       <HUD />
+      <TouchControls />
     </div>
   );
 }

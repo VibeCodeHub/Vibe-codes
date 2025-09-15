@@ -31,6 +31,7 @@ export interface GameState {
   rngSeed: string;
   rngState: number; // internal PRNG state for determinism
   accumulatorMs: number; // fixed-step accumulator
+  quality: 'low' | 'medium' | 'high';
 }
 
 export interface InputActions {

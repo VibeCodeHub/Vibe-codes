@@ -43,3 +43,19 @@ Troubleshooting
 - Foggy glass: reduce roughness and/or thickness; increase attenuationDistance.
 - FPS dips: reduce DPR (e.g., `dpr={[1,1.5]}`), lower bloom intensity, or disable bloom.
 
+Mobile
+
+- Quality levels: Low (solid), Medium (transmission, no bloom), High (transmission + bloom).
+- Auto-quality: Frame-time monitoring adjusts quality automatically on sustained regress.
+- Touch controls: Swipe left/right to move, up/down to rotate, long-press for soft drop.
+- DPR scaling: AdaptiveDpr clamps to [1,2] based on performance.
+- Query override: `?quality=low|medium|high` for testing.
+
+Performance Notes
+
+- Draw calls: ~3 (board + tetromino + postprocessing)
+- Transmission requires HDRI environment and tone mapping for realistic refraction.
+- @Web three.js MeshPhysicalMaterial transmission docs
+- @Web react-three-fiber docs
+- @Web drei Environment docs
+

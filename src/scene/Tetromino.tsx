@@ -23,21 +23,23 @@ const COLORS = [
 
 export default function Tetromino({ piece }: TetrominoProps): React.ReactElement | null {
   const instRef = useRef<InstancedMesh | null>(null);
+  const quality = useGameStore(s => s.quality);
 
   const geometry = useMemo(() => new BoxGeometry(1, 1, 1), []);
   const material = useMemo(() => {
+    const enableTransmission = quality !== 'low';
     const m = new MeshPhysicalMaterial({
       metalness: 0,
       roughness: 0.07,
-      transmission: 1.0,
+      transmission: enableTransmission ? 1.0 : 0,
       ior: 1.5,
-      thickness: 0.2,
+      thickness: enableTransmission ? 0.2 : 0,
       attenuationDistance: 2.0,
     });
     // Transmission relies on environment for believable refraction per three.js docs.
     // @Web three MeshPhysicalMaterial transmission docs
     return m;
-  }, []);
+  }, [quality]);
 
   useLayoutEffect(() => () => {
     geometry.dispose();
