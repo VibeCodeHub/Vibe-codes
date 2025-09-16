@@ -25,10 +25,10 @@ export default defineConfig({
         ],
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-      manifest: {
-        name: 'R3F Glass Tetris',
-        short_name: 'Glass Tetris',
-        description: 'A photorealistic 3D Tetris game with glass pieces',
+          manifest: {
+            name: 'R3F Glass Blocks',
+            short_name: 'Glass Blocks',
+            description: 'A photorealistic 3D block-stacking game with glass pieces',
         theme_color: '#0b0e11',
         background_color: '#0b0e11',
         display: 'standalone',

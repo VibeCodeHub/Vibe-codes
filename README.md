@@ -1,6 +1,6 @@
-R3F Glass Tetris
+R3F Glass Blocks
 
-React + Vite + TypeScript + @react-three/fiber + drei + three.js.
+A photorealistic 3D block-stacking game built with React + Vite + TypeScript + @react-three/fiber + drei + three.js.
 
 Install
 
@@ -140,6 +140,16 @@ Offline Assets
 - ✅ Icons and manifest
 - ⚠️ HDRI environment (lazy-loaded, cached 7 days)
 - ❌ External CDN assets (fallback to default environment)
+
+## Legal Notes
+
+This game is inspired by classic block-stacking puzzle games. The game mechanics and scoring system are based on established conventions in the puzzle game genre. The Super Rotation System (SRS) implementation follows the official Tetris Guideline specification as documented in the Tetris Wiki.
+
+**SRS Source**: https://tetris.wiki/Super_Rotation_System
+
+This project is for educational and entertainment purposes. All code is original implementation using open-source libraries.
+
+## Technical References
 
 @Web three.js MeshPhysicalMaterial transmission docs
 @Web react-three-fiber docs

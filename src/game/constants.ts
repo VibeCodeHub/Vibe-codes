@@ -17,7 +17,7 @@ export const LINE_CLEAR_SCORES: Record<number, number> = {
   1: 100,
   2: 300,
   3: 500,
-  4: 800, // Tetris
+  4: 800, // Glass Blocks (4-line clear)
 };
 
 // Soft/hard drop points per cell moved.

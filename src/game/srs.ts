@@ -1,5 +1,5 @@
 // Super Rotation System (SRS) kick tables
-// Origin and reference: Tetris Guideline SRS (see community docs and Tetris Wiki)
+// Origin and reference: Tetris Guideline SRS (see Tetris Wiki: https://tetris.wiki/Super_Rotation_System)
 // @Web: https://tetris.wiki/Super_Rotation_System
 
 import type { PieceKind, Rotation } from './types';

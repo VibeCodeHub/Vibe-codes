@@ -144,7 +144,7 @@ export class AudioManager {
   }
 
   playTetris(): void {
-    // Special sound for 4-line clear (Tetris)
+    // Special sound for 4-line clear (Glass Blocks)
     const melody = [440, 554, 659, 880];
     melody.forEach((freq, i) => {
       setTimeout(() => {

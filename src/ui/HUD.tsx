@@ -285,7 +285,7 @@ export default function HUD(): React.ReactElement {
             style={{
               width: '80px',
               height: '20px',
-              background: '#1a222d',
+              background: '#1a1a2e',
               outline: 'none',
               borderRadius: '10px',
               appearance: 'none',
@@ -306,7 +306,7 @@ export default function HUD(): React.ReactElement {
       </div>
       <style>{`
         :focus-visible {
-          outline: 2px solid #80b5ff;
+          outline: 2px solid #4a9eff;
           outline-offset: 2px;
         }
         
@@ -315,36 +315,36 @@ export default function HUD(): React.ReactElement {
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: #80b5ff;
+          background: #4a9eff;
           cursor: pointer;
-          border: 2px solid #1a222d;
+          border: 2px solid #1a1a2e;
         }
         
         #volume-slider::-moz-range-thumb {
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: #80b5ff;
+          background: #4a9eff;
           cursor: pointer;
-          border: 2px solid #1a222d;
+          border: 2px solid #1a1a2e;
         }
         
         #volume-slider::-webkit-slider-track {
           height: 4px;
-          background: #2c3a4a;
+          background: #2a4a6e;
           border-radius: 2px;
         }
         
         #volume-slider::-moz-range-track {
           height: 4px;
-          background: #2c3a4a;
+          background: #2a4a6e;
           border-radius: 2px;
           border: none;
         }
         
         button:focus-visible,
         input:focus-visible {
-          outline: 2px solid #80b5ff;
+          outline: 2px solid #4a9eff;
           outline-offset: 2px;
         }
       `}</style>
@@ -353,16 +353,16 @@ export default function HUD(): React.ReactElement {
 }
 
 const btnStyle: React.CSSProperties = {
-  background: '#1a222d',
+  background: '#1a1a2e',
   color: '#e6e9ee',
-  border: '1px solid #2c3a4a',
+  border: '1px solid #2a4a6e',
   borderRadius: 6,
   padding: '6px 10px',
   cursor: 'pointer',
 };
 
 const activeBtnStyle: React.CSSProperties = {
-  background: '#2d3748',
-  borderColor: '#4a5568',
+  background: '#2a2a4e',
+  borderColor: '#4a9eff',
 };
 

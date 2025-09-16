@@ -3,7 +3,8 @@ import { GridHelper } from 'three';
 import { GRID_W, GRID_H } from '../game/constants';
 
 export default function FloorGrid(): React.ReactElement {
-  const grid = useMemo(() => new GridHelper(GRID_W, GRID_W, 0x444444, 0x222222), []);
+  // Updated grid with glass blue accent colors
+  const grid = useMemo(() => new GridHelper(GRID_W, GRID_W, 0x2a4a6e, 0x1a2a4a), []);
 
   return (
     <primitive 
