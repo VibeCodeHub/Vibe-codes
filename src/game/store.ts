@@ -4,6 +4,7 @@ import type { GameState } from './types';
 import { SevenBagRNG } from './rng';
 import { applyHardDrop, applyMove, applyRotate, applySoftDrop, createEmptyBoard, spawnPosition, stepGravity } from './logic';
 import { ReplayRecorder, ReplayPlayer, type ReplayData, type ReplayInput } from './replay';
+import { audioManager } from '../audio/AudioManager';
 
 type Store = GameState & {
   start: (seed?: string) => void;
@@ -105,7 +106,19 @@ export const useGameStore = create<Store>((set, get) => {
         const res = applySoftDrop(current);
         current = { ...res.state, score: current.score + res.points };
       } else {
+        const beforeLines = current.lines;
         current = stepGravity(current, rng);
+        
+        // Check for line clears and play appropriate sound
+        if (current.lines > beforeLines) {
+          const linesCleared = current.lines - beforeLines;
+          if (linesCleared === 4) {
+            audioManager.playTetris();
+          } else {
+            audioManager.playLineClear(linesCleared);
+          }
+        }
+        
         if (!current.active) {
           // spawn next after lock
           set(current);
@@ -168,13 +181,21 @@ export const useGameStore = create<Store>((set, get) => {
   function move(dx: -1 | 1): void {
     if (get().isReplaying) return; // Block input during replay
     recordInput('move', dx);
-    set(applyMove(get(), dx));
+    const result = applyMove(get(), dx);
+    if (result) {
+      set(result);
+      audioManager.playMove();
+    }
   }
 
   function rotate(dir: -1 | 1): void {
     if (get().isReplaying) return; // Block input during replay
     recordInput('rotate', dir);
-    set(applyRotate(get(), dir));
+    const result = applyRotate(get(), dir);
+    if (result) {
+      set(result);
+      audioManager.playRotate();
+    }
   }
 
   function softDrop(active: boolean): void {
@@ -189,6 +210,7 @@ export const useGameStore = create<Store>((set, get) => {
     const before = get();
     const res = applyHardDrop(before);
     set({ ...res.state, score: res.state.score + res.points });
+    audioManager.playDrop();
     spawnNext();
   }
 
@@ -205,6 +227,7 @@ export const useGameStore = create<Store>((set, get) => {
       set({ hold: currentKind, holdUsed: true });
       spawnNext();
     }
+    audioManager.playRotate(); // Use rotate sound for hold
   }
 
   function pause(): void {
@@ -212,12 +235,16 @@ export const useGameStore = create<Store>((set, get) => {
     recordInput('pause');
     userPaused = true;
     set({ paused: true });
+    audioManager.playPause();
   }
 
   function resume(): void {
     if (get().isReplaying) return; // Block input during replay
     recordInput('resume');
-    if (!userPaused) set({ paused: false });
+    if (!userPaused) {
+      set({ paused: false });
+      audioManager.playResume();
+    }
   }
 
   function restart(): void {
