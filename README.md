@@ -89,6 +89,51 @@ Performance Notes
 - Debug HUD: Press ` (backtick) to show FPS, DPR, draw calls, quality transitions.
 - iOS Web Inspector: Use Safari's Web Inspector to monitor performance on device.
 
+Replay System
+
+The game includes a deterministic replay system for recording and playing back gameplay sessions.
+
+**Recording:**
+1. Click "Record" to start recording inputs
+2. Play normally - all inputs are captured
+3. Click "Stop Rec" to stop recording
+4. Click "Export" to download replay as JSON file
+
+**Playback:**
+1. Click "Import" → "File" to load from file, or "Clipboard" to load from clipboard
+2. Click "Play" to start replay (live input is blocked during replay)
+3. Click "Stop" to stop replay
+
+**Replay Format:**
+```json
+{
+  "seed": "game-seed-string",
+  "inputs": [
+    {"t": 0, "action": "move", "data": -1},
+    {"t": 5, "action": "rotate", "data": 1},
+    {"t": 10, "action": "hardDrop"},
+    {"t": 15, "action": "softDrop", "data": 1}
+  ],
+  "version": "1.0.0",
+  "timestamp": 1234567890,
+  "score": 1500,
+  "lines": 5
+}
+```
+
+**Actions:**
+- `move`: data = -1 (left) or 1 (right)
+- `rotate`: data = -1 (CCW) or 1 (CW)
+- `softDrop`: data = 1 (start) or 0 (stop)
+- `hardDrop`: no data
+- `hold`: no data
+- `pause`/`resume`: no data
+
+**Determinism:**
+- Same seed + same inputs = identical game state
+- Replays are frame-perfect reproductions
+- All game logic is deterministic (RNG, physics, scoring)
+
 Offline Assets
 
 - ✅ Core game assets (JS, CSS, HTML)
