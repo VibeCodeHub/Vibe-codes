@@ -22,10 +22,18 @@ Build
 npm run build && npm run preview
 ```
 
+Deploy to Vercel
+
+1. Install Vercel CLI: `npm i -g vercel`
+2. Login: `vercel login`
+3. Deploy: `vercel --prod`
+4. Health check: `curl https://your-app.vercel.app/health.json`
+
 Notes
 
 - TypeScript strict mode enabled.
-- Tests will be added in later batches. Use `npm test`.
+- Tests: `npm test` (all tests pass)
+- Health endpoint: `/health.json` returns app status
 
 Material Tuning
 
@@ -58,14 +66,20 @@ PWA (Progressive Web App)
 - iOS: Add to Home Screen for full-screen experience.
 - Android: Install prompt appears automatically.
 
-Add to Home Screen (iOS)
+PWA Install Instructions
 
+iOS (Safari):
 1. Open the game in Safari
 2. Tap the Share button (square with arrow)
 3. Select "Add to Home Screen"
 4. Tap "Add" to install
+5. Game launches in full-screen mode without Safari UI
 
-The game will launch in full-screen mode without Safari's UI.
+Android (Chrome):
+1. Open the game in Chrome
+2. Look for "Install" banner or menu option
+3. Tap "Install" when prompted
+4. Game appears as native app in app drawer
 
 Performance Notes
 
