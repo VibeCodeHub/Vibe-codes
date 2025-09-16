@@ -78,11 +78,7 @@ export function spawnPosition(kind: PieceKind): { x: number; y: number; rotation
 export function tryRotate(board: Board, piece: ActivePiece, dir: -1 | 1): ActivePiece | null {
   const toRot = nextRotation(piece.rotation, dir);
   const kicks = getKicks(piece.kind, piece.rotation, toRot);
-  // Extend with a few permissive attempts to accommodate our local pivot/shape
-  // while remaining close to SRS behavior.
-  const extra: Vec2[] = [{ x: 1, y: 0 }, { x: 2, y: 0 }, { x: -2, y: 0 }, { x: 0, y: 1 }];
-  const attempts: Vec2[] = [...kicks, ...extra];
-  for (const k of attempts) {
+  for (const k of kicks) {
     const nx = piece.x + k.x;
     const ny = piece.y + k.y;
     if (!collides(board, piece.kind, toRot, { x: nx, y: ny })) {

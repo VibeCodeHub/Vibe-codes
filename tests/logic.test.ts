@@ -17,7 +17,8 @@ describe('Logic - collisions and SRS', () => {
 
   it('applies SRS kicks near wall to rotate', () => {
     const board = createEmptyBoard();
-    const nearLeft = makePiece('J', 0, 0, 0);
+    // J piece at (1, 0) should be able to rotate with SRS kicks
+    const nearLeft = makePiece('J', 1, 0, 0);
     const rotated = tryRotate(board, nearLeft, 1);
     expect(rotated).not.toBeNull();
   });

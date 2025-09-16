@@ -19,16 +19,9 @@ const I_KICKS: Record<`${Rotation}-${Rotation}`, Kick[]> = {
 };
 
 // For J, L, S, T, Z pieces
+// Source: https://tetris.wiki/Super_Rotation_System
 const JLSTZ_KICKS: Record<`${Rotation}-${Rotation}`, Kick[]> = {
-  '0-1': [
-    { x: 0, y: 0 },
-    { x: -1, y: 0 },
-    { x: -1, y: +1 },
-    { x: 0, y: -2 },
-    { x: -1, y: -2 },
-    // Additional permissive try to accommodate our local pivot
-    { x: +1, y: 0 },
-  ],
+  '0-1': [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: +1 }, { x: 0, y: -2 }, { x: -1, y: -2 }],
   '1-0': [{ x: 0, y: 0 }, { x: +1, y: 0 }, { x: +1, y: -1 }, { x: 0, y: +2 }, { x: +1, y: +2 }],
   '1-2': [{ x: 0, y: 0 }, { x: +1, y: 0 }, { x: +1, y: -1 }, { x: 0, y: +2 }, { x: +1, y: +2 }],
   '2-1': [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: -1, y: +1 }, { x: 0, y: -2 }, { x: -1, y: -2 }],
