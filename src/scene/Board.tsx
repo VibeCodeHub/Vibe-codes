@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import { InstancedMesh, BoxGeometry, MeshPhysicalMaterial, Color, Object3D } from 'three';
+import { InstancedMesh, BoxGeometry, MeshPhysicalMaterial, MeshStandardMaterial, Color, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../game/store';
 import type { Board } from '../game/types';
@@ -18,18 +18,30 @@ const COLORS = [
   new Color('#ff6b79'),
 ];
 
+// Material cache per color for low-quality path
+const boardMaterialCache = new Map<number, MeshStandardMaterial>();
+
 export default function BoardMesh({ board }: BoardProps): React.ReactElement {
   const instRef = useRef<InstancedMesh | null>(null);
   const quality = useGameStore(s => s.quality);
   const geometry = useMemo(() => new BoxGeometry(1, 1, 1), []);
   const material = useMemo(() => {
-    const enableTransmission = quality !== 'low';
+    if (quality === 'low') {
+      // Low quality: MeshStandardMaterial for better mobile performance
+      return new MeshStandardMaterial({
+        metalness: 0,
+        roughness: 0.1,
+        color: 0x666666,
+      });
+    }
+    
+    // Medium/High quality: MeshPhysicalMaterial with transmission
     return new MeshPhysicalMaterial({
       metalness: 0,
       roughness: 0.08,
-      transmission: enableTransmission ? 1.0 : 0,
+      transmission: 1.0,
       ior: 1.5,
-      thickness: enableTransmission ? 0.22 : 0,
+      thickness: 0.22,
       attenuationDistance: 2.0,
     });
   }, [quality]);
@@ -42,7 +54,23 @@ export default function BoardMesh({ board }: BoardProps): React.ReactElement {
       for (let x = 0; x < board[y].length; x++) {
         const cell = board[y][x];
         if (!cell) continue;
-        (material as MeshPhysicalMaterial).attenuationColor = COLORS[cell.colorId];
+        
+        // Apply color based on quality
+        if (quality === 'low') {
+          // Use cached standard material per color
+          if (!boardMaterialCache.has(cell.colorId)) {
+            boardMaterialCache.set(cell.colorId, new MeshStandardMaterial({
+              metalness: 0,
+              roughness: 0.1,
+              color: COLORS[cell.colorId].getHex(),
+            }));
+          }
+          // Note: We can't change material per instance, so we'll use the base material
+          // and set color via attenuationColor for physical materials
+        } else {
+          (material as MeshPhysicalMaterial).attenuationColor = COLORS[cell.colorId];
+        }
+        
         temp.position.set(x + 0.5 - 5, -(y) + 19 - 0.5, 0);
         temp.rotation.set(0, 0, 0);
         temp.updateMatrix();

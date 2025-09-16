@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useLayoutEffect } from 'react';
-import { InstancedMesh, BoxGeometry, MeshPhysicalMaterial, Color, Object3D } from 'three';
+import { InstancedMesh, BoxGeometry, MeshPhysicalMaterial, MeshStandardMaterial, Color, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { ActivePiece } from '../game/types';
 import { SHAPES } from '../game/srs';
@@ -21,19 +21,32 @@ const COLORS = [
   new Color('#ff6b79'), // Z
 ];
 
+// Material cache per color for low-quality path (MeshStandardMaterial)
+const materialCache = new Map<number, MeshStandardMaterial>();
+
 export default function Tetromino({ piece }: TetrominoProps): React.ReactElement | null {
   const instRef = useRef<InstancedMesh | null>(null);
   const quality = useGameStore(s => s.quality);
 
   const geometry = useMemo(() => new BoxGeometry(1, 1, 1), []);
   const material = useMemo(() => {
-    const enableTransmission = quality !== 'low';
+    if (quality === 'low') {
+      // Low quality: MeshStandardMaterial (no transmission) for better mobile performance
+      // Transmission is physically-based and costlier; standard is faster on mobile
+      return new MeshStandardMaterial({
+        metalness: 0,
+        roughness: 0.1,
+        color: 0x666666,
+      });
+    }
+    
+    // Medium/High quality: MeshPhysicalMaterial with transmission
     const m = new MeshPhysicalMaterial({
       metalness: 0,
       roughness: 0.07,
-      transmission: enableTransmission ? 1.0 : 0,
+      transmission: 1.0,
       ior: 1.5,
-      thickness: enableTransmission ? 0.2 : 0,
+      thickness: 0.2,
       attenuationDistance: 2.0,
     });
     // Transmission relies on environment for believable refraction per three.js docs.
@@ -61,7 +74,23 @@ export default function Tetromino({ piece }: TetrominoProps): React.ReactElement
         case 'I': return 0; case 'J': return 1; case 'L': return 2; case 'O': return 3; case 'S': return 4; case 'T': return 5; case 'Z': return 6;
       }
     })();
-    (material as MeshPhysicalMaterial).attenuationColor = COLORS[colorId];
+    
+    // Apply color based on quality
+    if (quality === 'low') {
+      // Use cached standard material per color
+      if (!materialCache.has(colorId)) {
+        materialCache.set(colorId, new MeshStandardMaterial({
+          metalness: 0,
+          roughness: 0.1,
+          color: COLORS[colorId].getHex(),
+        }));
+      }
+      inst.material = materialCache.get(colorId)!;
+    } else {
+      // Physical material with attenuation color
+      (material as MeshPhysicalMaterial).attenuationColor = COLORS[colorId];
+    }
+    
     for (let i = 0; i < cells.length; i++) {
       const c = cells[i];
       temp.position.set(piece.x + c.x + 0.5 - 5, -(piece.y + c.y) + 19 - 0.5, 0);

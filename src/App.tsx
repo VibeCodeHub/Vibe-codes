@@ -2,10 +2,14 @@ import React, { useEffect } from 'react';
 import Scene from './scene/Scene';
 import BoardMesh from './scene/Board';
 import Tetromino from './scene/Tetromino';
+import GhostPiece from './scene/GhostPiece';
+import BoardFrame from './scene/BoardFrame';
+import FloorGrid from './scene/FloorGrid';
 import { useGameStore } from './game/store';
 import HUD from './ui/HUD';
 import TouchControls from './ui/TouchControls';
 import DebugHUD from './ui/DebugHUD';
+import GlassTuning from './ui/GlassTuning';
 
 function App(): React.ReactElement {
   const { board, active, tick, move, rotate, softDrop, hardDrop, hold, pause } = useGameStore(s => ({
@@ -75,12 +79,16 @@ function App(): React.ReactElement {
       }}
     >
       <Scene>
+        <FloorGrid />
+        <BoardFrame />
         <BoardMesh board={board} />
         <Tetromino piece={active} />
+        <GhostPiece piece={active} />
       </Scene>
       <HUD />
       <TouchControls />
       <DebugHUD />
+      <GlassTuning />
     </div>
   );
 }
