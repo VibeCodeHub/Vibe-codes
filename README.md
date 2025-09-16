@@ -55,6 +55,9 @@ Performance Notes
 
 - Draw calls: ~3 (board + tetromino + postprocessing)
 - Transmission requires HDRI environment and tone mapping for realistic refraction.
+- Auto-quality: Hysteresis prevents oscillation (26ms→downgrade, 16.5ms→upgrade, 2s cooldown).
+- Debug HUD: Press ` (backtick) to show FPS, DPR, draw calls, quality transitions.
+- iOS Web Inspector: Use Safari's Web Inspector to monitor performance on device.
 - @Web three.js MeshPhysicalMaterial transmission docs
 - @Web react-three-fiber docs
 - @Web drei Environment docs

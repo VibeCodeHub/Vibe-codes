@@ -35,16 +35,15 @@ export default function TouchControls(): React.ReactElement | null {
     const deltaY = touch.clientY - touchStartY.current;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
-    // Swipe threshold
-    if (distance > 30) {
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Horizontal swipe
+    // Swipe threshold: horizontal move only, with vertical deadzone
+    if (distance > 24) {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+      
+      // Only horizontal swipes (vertical deadzone ±18px)
+      if (absX > absY && absY < 18) {
         if (deltaX > 0) move(1);
         else move(-1);
-      } else {
-        // Vertical swipe
-        if (deltaY < 0) rotate(1); // swipe up = rotate CW
-        else rotate(-1); // swipe down = rotate CCW
       }
     }
     

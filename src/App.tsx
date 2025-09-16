@@ -5,6 +5,7 @@ import Tetromino from './scene/Tetromino';
 import { useGameStore } from './game/store';
 import HUD from './ui/HUD';
 import TouchControls from './ui/TouchControls';
+import DebugHUD from './ui/DebugHUD';
 
 function App(): React.ReactElement {
   const { board, active, tick, move, rotate, softDrop, hardDrop, hold, pause } = useGameStore(s => ({
@@ -59,13 +60,27 @@ function App(): React.ReactElement {
   }, [move, rotate, softDrop, hardDrop, hold, pause]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', background: '#0b0e11', color: '#e6e9ee' }}>
+    <div 
+      style={{ 
+        width: '100vw', 
+        height: '100vh', 
+        background: '#0b0e11', 
+        color: '#e6e9ee',
+        overscrollBehavior: 'contain',
+        touchAction: 'manipulation',
+      }}
+      onTouchMove={(e) => {
+        // Prevent iOS page scroll during game interaction
+        e.preventDefault();
+      }}
+    >
       <Scene>
         <BoardMesh board={board} />
         <Tetromino piece={active} />
       </Scene>
       <HUD />
       <TouchControls />
+      <DebugHUD />
     </div>
   );
 }

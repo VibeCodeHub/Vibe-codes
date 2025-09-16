@@ -37,7 +37,7 @@ export default function Tetromino({ piece }: TetrominoProps): React.ReactElement
       attenuationDistance: 2.0,
     });
     // Transmission relies on environment for believable refraction per three.js docs.
-    // @Web three MeshPhysicalMaterial transmission docs
+    // @Web three.js MeshPhysicalMaterial transmission docs
     return m;
   }, [quality]);
 
